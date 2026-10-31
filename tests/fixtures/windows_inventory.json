@@ -1,0 +1,12 @@
+{"queues": [{"name": "HPE8F1F1 (HP DeskJet 3700 series)", "driver": "HP DJ 3700 series PCL-3", "port": "WSD-1fd11e20-038d-4b41-a95e-a34a545a30b3", "status": "UserIntervention", "type": "Local", "shared": false, "location": "http://192.168.0.149:3911/", "comment": "", "isDefault": true, "workOffline": false, "detectedError": 1, "cimLocation": "http://192.168.0.149:3911/", "jobs": [{"id": 3, "document": "Simple PDF print", "status": "Normal", "submitted": "2026-10-26T12:53:24.3390000Z", "pages": 1, "size": 77531, "owner": "someone"}, {"id": 4, "document": "Simple photo print", "status": "Error, Printing", "submitted": "2026-10-26T12:53:58.8000000Z", "pages": 1, "size": 449841, "owner": "someone"}]},
+ {"name": "Microsoft Print to PDF", "driver": "Microsoft Print To PDF", "port": "PORTPROMPT:", "status": "Normal", "type": "Local", "shared": false, "location": "", "comment": "", "isDefault": false, "workOffline": false, "detectedError": 0, "cimLocation": "", "jobs": []},
+ {"name": "Office Laser", "driver": "Brother HL-L2350D series", "port": "IP_10.0.0.50", "status": "Paused", "type": "Local", "shared": false, "location": "", "comment": "", "isDefault": false, "workOffline": false, "detectedError": 2, "cimLocation": "", "jobs": {"id": 7, "document": "single job as object", "status": "", "submitted": null, "pages": null, "size": null, "owner": ""}}],
+ "ports": [{"name": "PORTPROMPT:", "monitor": "Local Monitor", "description": "Port lokalny", "host": "", "portNumber": null, "protocol": ""},
+  {"name": "WSD-1fd11e20-038d-4b41-a95e-a34a545a30b3", "monitor": "WSD Port Monitor", "description": "WSD Port", "host": "", "portNumber": null, "protocol": ""},
+  {"name": "IP_10.0.0.50", "monitor": "Standard TCP/IP Port", "description": "Standard TCP/IP Port", "host": "10.0.0.50", "portNumber": 9100, "protocol": "1"}],
+ "drivers": [{"name": "HP DJ 3700 series PCL-3", "manufacturer": "HP", "version": "5629838836701381", "env": "Windows x64", "major": 4, "inf": "C:\\Windows\\inf\\hp.inf", "provider": "HP"}],
+ "usb": [{"id": "USB\\VID_04B8&PID_1186\\X1", "name": "EPSON ET-2850 Series", "manufacturer": "", "status": "Error", "problem": 28, "pnpClass": "", "present": true, "hardwareIds": ["USB\\VID_04B8&PID_1186", "USB\\Class_07&SubClass_01&Prot_02"]}],
+ "spooler": {"state": "Running", "startMode": "Auto"},
+ "interfaces": {"name": "Wi-Fi", "address": "192.168.0.10", "prefix": 24, "media": "Native 802.11", "up": true},
+ "isAdmin": false,
+ "errors": []}

@@ -1,0 +1,78 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "printmedic"
+version = "0.1.0"
+description = "Cross-vendor printer discovery, diagnostics and safe repair for the desktop."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "PrintMedic contributors" }]
+dependencies = [
+    "PySide6>=6.7",
+    "zeroconf>=0.132",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "pytest-qt>=4.4",
+    "ruff>=0.6",
+    "mypy>=1.11",
+]
+package = ["pyinstaller>=6.10"]
+
+[project.scripts]
+printmedic-cli = "printmedic.cli:main"
+
+[project.gui-scripts]
+printmedic = "printmedic.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["printmedic*"]
+
+[tool.setuptools.package-data]
+"printmedic.ui" = ["assets/*.svg"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "SIM", "RUF"]
+ignore = [
+    "S101",   # assert is fine in tests
+    "S603",   # subprocess without shell — we audit argument construction ourselves
+    "S607",   # partial executable path (powershell.exe is resolved via SystemRoot)
+    "RUF001", "RUF002", "RUF003",  # Polish text contains non-ASCII lookalikes
+    "RUF012",
+    "UP042",  # (str, Enum) is intentional: values serialize directly to JSON
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S", "B011"]
+"printmedic/i18n/*" = ["E501"]
+"printmedic/diagnostics/catalog.py" = ["E501"]
+
+[tool.mypy]
+python_version = "3.12"
+packages = ["printmedic"]
+ignore_missing_imports = true
+check_untyped_defs = true
+warn_unused_ignores = true
+no_implicit_optional = true
+exclude = ["printmedic/ui/"]
+
+[[tool.mypy.overrides]]
+module = "printmedic.ui.*"
+ignore_errors = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "windows: requires a real Windows print subsystem (read-only)",
+    "ui: Qt user interface tests",
+]
+qt_api = "pyside6"
