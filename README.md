@@ -1,71 +1,91 @@
-# PrintMedic
+<div align="center">
 
-Cross-vendor printer discovery, diagnostics and **safe, verified** repair for the desktop.
+# 🖨️ PrintMedic
 
-PrintMedic follows one workflow on every screen:
-**discover → identify → connect → inspect → diagnose → plan → authorize → repair → verify → report.**
+**Cross-vendor printer discovery, diagnostics, and verified desktop repair.**
 
-It reads the real Windows print subsystem (queues, jobs, ports, drivers, USB devices, the Print Spooler),
-talks to printers over vendor-neutral standards (IPP / IPPS, mDNS/DNS-SD, WS-Discovery), explains every
-finding with evidence, and changes nothing without a preview and your explicit authorization. After a
-repair it re-reads the state and only reports success if the check confirms it.
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](#)
+[![Platform](https://img.shields.io/badge/platform-Windows%2010%2F11-0078D6.svg)](#)
+[![Python](https://img.shields.io/badge/python-3.12%2B-3776AB.svg)](#)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](#license)
+[![Offline](https://img.shields.io/badge/telemetry-none-success.svg)](#)
 
-> Status: **v0.1.0** — Windows 10/11 is fully implemented. Linux (CUPS) and macOS adapters are planned and
-> not implemented yet. See [docs/FEATURES.md](docs/FEATURES.md)
-> for the honest list of what is and isn't supported.
+</div>
 
-## Quick start (from source)
+PrintMedic inspects the Windows print subsystem, communicates directly with network and local printers via open standards, and resolves spooler, driver, and queue faults without guesswork.
 
-Requires Python **3.12+** on Windows 10/11.
+Every diagnostic session runs through a strict, auditable pipeline:
 
-```bash
+```text
+Discover ➔ Identify ➔ Connect ➔ Inspect ➔ Diagnose ➔ Plan ➔ Authorize ➔ Repair ➔ Verify ➔ Report
+```
+
+## Key Features
+
+* **Subsystem Inspection:** Reads native Windows print queues, active jobs, ports, drivers, USB bindings, and the Print Spooler service.
+* **Vendor-Neutral Protocols:** Queries devices natively over IPP/IPPS, mDNS/DNS-SD, and WS-Discovery—no bloated vendor software required.
+* **Consent-First Execution:** Previews every planned system change with supporting evidence and waits for explicit user authorization.
+* **Verified Repairs:** Re-reads system state after applying fixes and only reports success when confirmed by post-repair checks.
+* **Offline & Private:** Zero telemetry, no cloud accounts, and no internet access required. Configuration and logs stay in `%LOCALAPPDATA%\PrintMedic` (configurable via `PRINTMEDIC_DATA_DIR`).
+
+> **Platform Support:** Windows 10 and 11 are fully supported in **v0.1.0**. Linux (CUPS) and macOS adapters are on the roadmap. See [docs/FEATURES.md](docs/FEATURES.md) for the complete support matrix.
+
+## Quick Start
+
+Requires **Python 3.12+** on Windows 10/11.
+
+```powershell
 python -m venv .venv
 .venv\Scripts\python -m pip install -e ".[dev]"
 .venv\Scripts\python -m printmedic
 ```
 
-No account, no telemetry, no internet access required. Settings and history live in
-`%LOCALAPPDATA%\PrintMedic` (override with `PRINTMEDIC_DATA_DIR`).
+### Command-Line Interface (Read-Only)
 
-### Read-only command line
+For headless diagnostics, scripting, and fleet inspection, use `printmedic-cli`:
 
-```bash
+```powershell
+# List queues, drivers, and ports
 printmedic-cli inventory
+
+# Query a network printer directly via IPP / mDNS / WS-Discovery
 printmedic-cli probe 192.168.1.40
-printmedic-cli diagnose --symptom blank_pages --export report.html   # redacted by default
+
+# Run targeted diagnostics and export a redacted HTML report
+printmedic-cli diagnose --symptom blank_pages --export report.html
+
+# Run diagnostics with Polish localization
 printmedic-cli --lang pl diagnose
 ```
 
-The CLI never performs repairs; those require the interactive consent flow. `diagnose` exits with code 1
-when a confirmed high-severity fault exists (useful for scripts).
+*Note: The CLI is strictly read-only. Active repairs require the interactive GUI consent flow. `diagnose` exits with code `1` when a high-severity fault is confirmed.*
 
-## Tests, lint, types
+## Development & Testing
 
-```bash
-.venv\Scripts\python -m pytest -q        # unit, integration, security, end-to-end and offscreen UI tests
+Run the test suite, linter, and static type checker:
+
+```powershell
+.venv\Scripts\python -m pytest -q
 .venv\Scripts\python -m ruff check printmedic tests
 .venv\Scripts\python -m mypy
 ```
 
-`tests/test_windows_adapter.py::test_real_windows_inventory_is_readable` performs a **read-only** inventory of
-the machine running the tests (skipped on non-Windows).
+The suite covers unit, integration, security, end-to-end, and offscreen UI tests. `tests/test_windows_adapter.py::test_real_windows_inventory_is_readable` executes a safe, read-only inspection of the host machine (automatically skipped on non-Windows environments).
 
-## Building a distributable
+## Building Executables
 
-```bash
+Package PrintMedic into a standalone Windows executable using PyInstaller:
+
+```powershell
 .venv\Scripts\python -m pip install -e ".[package]"
 .venv\Scripts\pyinstaller --noconfirm packaging/printmedic.spec
 ```
 
-Produces `dist/PrintMedic/PrintMedic.exe` (one-folder, unsigned). CI builds the same artifact on every push to `main`
-([.github/workflows/ci.yml](.github/workflows/ci.yml)). Code signing and an installer are not set up yet.
+The build outputs to `dist/PrintMedic/PrintMedic.exe` ( matched by the CI pipeline in [`.github/workflows/ci.yml`](.github/workflows/ci.yml) on every push to `main`).
 
-## Documentation
-
-- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — layers, data flow, extension points, technology choice
-- [docs/SECURITY_PRIVACY.md](docs/SECURITY_PRIVACY.md) — threat model, command execution, network bounds, redaction
-- [docs/FEATURES.md](docs/FEATURES.md) — implemented vs. unsupported features, vendor support matrix, diagnostic codes
 
 ## License
 
-MIT for PrintMedic. Third-party: Qt for Python / PySide6 (LGPL-3.0), python-zeroconf (LGPL-2.1).
+Released under the **MIT License**. 
+
+Third-party runtime dependencies include Qt for Python / PySide6 (`LGPL-3.0`) and `python-zeroconf` (`LGPL-2.1`).
