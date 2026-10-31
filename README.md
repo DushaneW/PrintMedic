@@ -81,7 +81,6 @@ Package PrintMedic into a standalone Windows executable using PyInstaller:
 .venv\Scripts\pyinstaller --noconfirm packaging/printmedic.spec
 ```
 
-The build outputs to `dist/PrintMedic/PrintMedic.exe` ( matched by the CI pipeline in [`.github/workflows/ci.yml`](.github/workflows/ci.yml) on every push to `main`).
 
 
 ## License
